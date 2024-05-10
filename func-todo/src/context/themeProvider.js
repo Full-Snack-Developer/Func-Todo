@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, createContext } from "react";
 
-const themeContext = createContext();
+const themeContext = createContext("dark");
 
 function ThemeProvider({ children }) {
   const [theme, setTheme] = useState("dark");
@@ -11,7 +11,9 @@ function ThemeProvider({ children }) {
 
   const value = { theme, toggleTheme };
   return (
-    <themeContext.Provider value={{ value }}>{children}</themeContext.Provider>
+    <themeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </themeContext.Provider>
   );
 }
 export { themeContext, ThemeProvider };

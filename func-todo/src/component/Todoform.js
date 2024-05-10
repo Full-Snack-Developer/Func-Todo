@@ -1,15 +1,31 @@
-import React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+} from "react";
 
-export default function Todoform({ addTodo }) {
+const Todoform = forwardRef(({ addTodo, ...props }, ref) => {
   const [value, setValue] = useState("");
   const inputRef = useRef(null);
+  const [id, setId] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTodo(value);
+    addTodo(value, id);
     setValue("");
   };
+
+  useImperativeHandle(ref, () => ({
+    updateValue(id, value) {
+      setId(id);
+      setValue(value);
+    },
+    clearId() {
+      setId(null);
+    },
+  }));
 
   return (
     <div>
@@ -25,4 +41,6 @@ export default function Todoform({ addTodo }) {
       </form>
     </div>
   );
-}
+});
+
+export default Todoform;

@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-export default function Todo({ task, toggleComplete, deleteTodo }) {
+export default function Todo({ task, toggleComplete, deleteTodo, selectTodo }) {
   return (
     <div className="Todo">
       <p
@@ -14,7 +14,10 @@ export default function Todo({ task, toggleComplete, deleteTodo }) {
         {task.task}
       </p>
       <div>
-        <FontAwesomeIcon icon={faPenToSquare} />
+        <FontAwesomeIcon
+          icon={faPenToSquare}
+          onClick={() => selectTodo(task.id)}
+        />
         <FontAwesomeIcon icon={faTrash} onClick={() => deleteTodo(task.id)} />
       </div>
     </div>

@@ -8,15 +8,13 @@ import { useContext } from "react";
 import { themeContext } from "./context/themeProvider";
 function App() {
   const contextTheme = useContext(themeContext);
-
+  // console.log(contextTheme);
   return (
-    <div className={contextTheme.theme}>
-      <div className="App">
-        <Todolist />
-        <button onClick={contextTheme.toggleTheme}>
-          <FontAwesomeIcon icon={faToggleOff} />
-        </button>
-      </div>
+    <div className="App">
+      <Todolist />
+      <button onClick={contextTheme.toggleTheme}>
+        <FontAwesomeIcon icon={faToggleOff} />
+      </button>
     </div>
   );
 }

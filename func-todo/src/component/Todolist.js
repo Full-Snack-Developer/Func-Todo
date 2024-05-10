@@ -52,14 +52,26 @@ function Todolist() {
     setFilteredTodos(filteredItems);
   }, [todos, filter]);
 
-  const addTodo = (todo) => {
+  const addTodo = (todo, id) => {
     if (todo.trim() === "") {
       return;
     }
-    setTodos([
-      ...todos,
-      { id: uuidv4(), task: todo, complete: false, isEditing: false },
-    ]);
+
+    const existingTodo = todos.find((item) => item.id === id);
+
+    if (existingTodo) {
+      setTodos((prevTodos) =>
+        prevTodos.map((item) =>
+          item.id === id ? { ...item, task: todo } : item
+        )
+      );
+      dataRef.current.clearId();
+    } else {
+      setTodos((prevTodos) => [
+        ...prevTodos,
+        { id: uuidv4(), task: todo, complete: false },
+      ]);
+    }
   };
 
   const toggleComplete = (id) => {
@@ -83,28 +95,32 @@ function Todolist() {
   const handleShowDoing = () => {
     setFilter("doing");
   };
+
+  const selectTodo = (id) => {
+    const getValue = todos.find((todo) => todo.id === id);
+    dataRef.current.updateValue(id, getValue.task);
+  };
+
   return (
-    <div className={contextTheme.theme}>
-      <div className="Todolist" ref={scrollRef}>
-        <h1>Todos</h1>
-        <Todoform addTodo={addTodo} />
-        {filteredTodos
-          .slice(0, pagination.page * pagination.itemsPerPage)
-          .map((todo) => (
-            <Todo
-              task={todo}
-              key={todo.id}
-              toggleComplete={toggleComplete}
-              deleteTodo={deleteTodo}
-              // dataRef={dataRef}
-            />
-          ))}
-        <Footer
-          handleShowAll={handleShowAll}
-          handleShowDone={handleShowDone}
-          handleShowDoing={handleShowDoing}
-        />
-      </div>
+    <div className={`${contextTheme.theme} Todolist `} ref={scrollRef}>
+      <h1>Todos</h1>
+      <Todoform addTodo={addTodo} ref={dataRef} />
+      {filteredTodos
+        .slice(0, pagination.page * pagination.itemsPerPage)
+        .map((todo) => (
+          <Todo
+            task={todo}
+            key={todo.id}
+            toggleComplete={toggleComplete}
+            deleteTodo={deleteTodo}
+            selectTodo={selectTodo}
+          />
+        ))}
+      <Footer
+        handleShowAll={handleShowAll}
+        handleShowDone={handleShowDone}
+        handleShowDoing={handleShowDoing}
+      />
     </div>
   );
 }
