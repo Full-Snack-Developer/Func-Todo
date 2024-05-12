@@ -6,26 +6,26 @@ import React, {
   useImperativeHandle,
 } from "react";
 
-const Todoform = forwardRef(({ addTodo, ...props }, ref) => {
+const Todoform = forwardRef(({ addNewTodo, ...props }, ref) => {
   const [value, setValue] = useState("");
   const inputRef = useRef(null);
-  const [id, setId] = useState(null);
+  // const [id, setId] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTodo(value, id);
+    addNewTodo(value);
     setValue("");
   };
 
-  useImperativeHandle(ref, () => ({
-    updateValue(id, value) {
-      setId(id);
-      setValue(value);
-    },
-    clearId() {
-      setId(null);
-    },
-  }));
+  // useImperativeHandle(ref, () => ({
+  //   updateValue(id, value) {
+  //     setId(id);
+  //     setValue(value);
+  //   },
+  //   clearId() {
+  //     setId(null);
+  //   },
+  // }));
 
   return (
     <div>
