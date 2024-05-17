@@ -1,15 +1,15 @@
 import React from "react";
 
-function Footer({ handleShowAll, handleShowDone, handleShowDoing }) {
+function Footer({ filterALLTODO, filterDoneTODO, filterDoingTODO }) {
   return (
     <div className="Footer">
-      <button className="footer-btn" onClick={handleShowAll}>
+      <button className="footer-btn" onClick={filterALLTODO}>
         ALL
       </button>
-      <button className="footer-btn" onClick={handleShowDone}>
+      <button className="footer-btn" onClick={filterDoneTODO}>
         DONE
       </button>
-      <button className="footer-btn" onClick={handleShowDoing}>
+      <button className="footer-btn" onClick={filterDoingTODO}>
         DOING
       </button>
     </div>

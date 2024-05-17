@@ -102,7 +102,7 @@ h1 {
   cursor: pointer;
 }
 
-.completed {
+.true {
   color: #c5aeff;
   text-decoration: line-through;
   cursor: pointer;

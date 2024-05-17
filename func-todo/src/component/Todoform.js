@@ -37,6 +37,7 @@ const Todoform = forwardRef(({ addNewTodo, ...props }, ref) => {
           onChange={(e) => setValue(e.target.value)}
           value={value}
           ref={inputRef}
+          autoFocus
         />
       </form>
     </div>

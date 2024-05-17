@@ -1,6 +1,8 @@
+import { type } from "../reducer/todoReducer";
+
 export const addTodo = (newTodo) => {
   return {
-    type: "ADD_TODO",
+    type: type.ADD_TODO,
     payload: newTodo,
   };
 };
