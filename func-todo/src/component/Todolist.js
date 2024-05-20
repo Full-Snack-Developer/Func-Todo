@@ -4,13 +4,8 @@ import Todoform from "./Todoform";
 import Todo from "./Todo";
 import { v4 as uuidv4 } from "uuid";
 import Footer from "./Footer";
-import { useDispatch, useSelector } from "react-redux";
-import { addTodo } from "../action/addTodoAction";
-import { deleteTodo } from "../action/deleteTodoAction";
-import { statusTodo } from "../action/statusTodoAction";
-import { filterTodo } from "../action/filterTodoAction";
+import { useSelector } from "react-redux";
 import { FILTER } from "../reducer/filterReducer";
-import { paginationTodo } from "../action/paginationTodoAction";
 
 uuidv4();
 
@@ -18,89 +13,60 @@ function Todolist() {
   const contextTheme = useContext(themeContext);
   const scrollRef = useRef(null);
   const dataRef = useRef(null);
-
-  //Redux
-  const dispatch = useDispatch();
   const todoList = useSelector((state) => state.todoReducer.list);
-  const todoListFilter = useSelector((state) => state.filterReducer.filter);
-  const todoPagination = useSelector(
-    (state) => state.paginationReducer.pagination
-  );
-
-  const addNewTodo = (task) => {
-    const newTODO = {
-      id: uuidv4(),
-      task: task,
-      status: false,
-    };
-    const actionAddTODO = addTodo(newTODO);
-    dispatch(actionAddTODO);
-  };
-
-  const deleteNewTodo = (id) => {
-    const actionDeleteTODO = deleteTodo(id);
-    dispatch(actionDeleteTODO);
-  };
-
-  const toggleComplete = (id) => {
-    const actionStatusTODO = statusTodo(id);
-    dispatch(actionStatusTODO);
-  };
-
-  const filterALLTODO = () => {
-    dispatch(filterTodo(FILTER.ALL));
-  };
-
-  const filterDoneTODO = () => {
-    dispatch(filterTodo(FILTER.DONE));
-  };
-
-  const filterDoingTODO = () => {
-    dispatch(filterTodo(FILTER.DOING));
-  };
-
-  const filteredTODO = todoList.filter((todo) => {
-    if (todoListFilter === FILTER.ALL) return true;
-    if (todoListFilter === FILTER.DONE) return todo.status === true;
-    if (todoListFilter === FILTER.DOING) return todo.status === false;
-    return true;
-  });
+  const currentFilter = useSelector((state) => state.filterReducer.filter);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        scrollRef.current.scrollHeight - scrollRef.current.scrollTop ===
-        scrollRef.current.clientHeight
-      ) {
-        dispatch(paginationTodo(page + 1, itemsPerPage));
+      if (scrollRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+        if (scrollTop + clientHeight >= scrollHeight) {
+          setPage((prevPage) => prevPage + 1);
+        }
       }
     };
 
-    scrollRef.current.addEventListener("scroll", handleScroll);
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener("scroll", handleScroll);
+    }
+
     return () => {
-      scrollRef.current.removeEventListener("scroll", handleScroll);
+      if (scrollElement) {
+        scrollElement.removeEventListener("scroll", handleScroll);
+      }
     };
-  }, [dispatch, page, itemsPerPage]);
+  }, []);
+
+  const filteredTODO = todoList.filter((todo) => {
+    if (currentFilter === FILTER.ALL) return true;
+    if (currentFilter === FILTER.DONE) return todo.status === true;
+    if (currentFilter === FILTER.DOING) return todo.status === false;
+    return true;
+  });
+
+  const displayedTODO = filteredTODO.slice(0, page * itemsPerPage);
+
+  const selectTodo = (id) => {
+    // dataRef.current.selectTodo(id);
+    console.log(id);
+  };
 
   return (
     <div className={`${contextTheme.theme} Todolist `} ref={scrollRef}>
       <h1>Todos</h1>
-      <Todoform addNewTodo={addNewTodo} ref={dataRef} />
-      {filteredTODO.map((todo) => (
+      <Todoform ref={dataRef} />
+      {displayedTODO.map((todo) => (
         <Todo
           todoList={todoList}
           task={todo}
           key={todo.id}
-          deleteNewTodo={deleteNewTodo}
-          toggleComplete={toggleComplete}
-          selectTodo={() => {}}
+          selectTodo={selectTodo}
         />
       ))}
-      <Footer
-        filterALLTODO={filterALLTODO}
-        filterDoneTODO={filterDoneTODO}
-        filterDoingTODO={filterDoingTODO}
-      />
+      <Footer />
     </div>
   );
 }

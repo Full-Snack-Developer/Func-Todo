@@ -5,27 +5,45 @@ import React, {
   useEffect,
   useImperativeHandle,
 } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { addTodo } from "../action/addTodoAction";
+import { useDispatch } from "react-redux";
 
-const Todoform = forwardRef(({ addNewTodo, ...props }, ref) => {
+const Todoform = forwardRef(({ ...props }, ref) => {
   const [value, setValue] = useState("");
   const inputRef = useRef(null);
-  // const [id, setId] = useState(null);
+  const dispatch = useDispatch();
+  const [id, setId] = useState(null);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addNewTodo(value);
+  const addNewTodo = (task) => {
+    const newTODO = {
+      id: uuidv4(),
+      task: task,
+      status: false,
+      eidt: false,
+    };
+
+    const actionAddTODO = addTodo(newTODO);
+    dispatch(actionAddTODO);
     setValue("");
   };
 
-  // useImperativeHandle(ref, () => ({
-  //   updateValue(id, value) {
-  //     setId(id);
-  //     setValue(value);
-  //   },
-  //   clearId() {
-  //     setId(null);
-  //   },
-  // }));
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (value.trim()) {
+      addNewTodo(value);
+    }
+  };
+
+  useImperativeHandle(ref, () => ({
+    updateValue(id, value) {
+      setId(id);
+      setValue(value);
+    },
+    clearId() {
+      setId(null);
+    },
+  }));
 
   return (
     <div>

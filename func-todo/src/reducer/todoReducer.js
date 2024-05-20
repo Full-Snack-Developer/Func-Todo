@@ -10,10 +10,6 @@ export const type = {
 export const initialState = {
   list: [],
   filter: FILTER.ALL,
-  pagination: {
-    page: 1,
-    itemsPerPage: 5,
-  },
 };
 
 const todoReducer = (state = initialState, action) => {
@@ -42,6 +38,15 @@ const todoReducer = (state = initialState, action) => {
       return {
         ...state,
         list: statusList,
+      };
+
+    case type.EDIT_TODO:
+      const editList = state.list.map((todo) =>
+        todo.id === action.payload.id ? action.payload : todo
+      );
+      return {
+        ...state,
+        list: editList,
       };
 
     default:
