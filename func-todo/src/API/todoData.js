@@ -8,4 +8,8 @@ const postData = (data) => {
   return instance.post("/listTodo", data);
 };
 
-export { getData, postData };
+const deleteData = (id) => {
+  return instance.delete(`/listTodo/${id}`);
+};
+
+export { getData, postData, deleteData };

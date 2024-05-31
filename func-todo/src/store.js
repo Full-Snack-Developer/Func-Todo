@@ -1,6 +1,6 @@
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import rootReducer from "./reducer";
-import { apiMiddleware } from "./middleware/customMiddle";
+import asyncMiddleware from "./middleware/customMiddle";
 
-const store = createStore(rootReducer, apiMiddleware(apiMiddleware));
+const store = createStore(rootReducer);
 export default store;

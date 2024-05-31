@@ -6,9 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import Footer from "./Footer";
 import { useSelector, useDispatch } from "react-redux";
 import { FILTER } from "../reducer/filterReducer";
-import { getData } from "../API/todoData.js";
-import { fetchData } from "../action/apiTodoAction";
-
+import { fetchTodoData } from "../action/apiTodoAction";
 uuidv4();
 
 function Todolist() {
@@ -19,13 +17,12 @@ function Todolist() {
   const currentFilter = useSelector((state) => state.filterReducer.filter);
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
-  //API DATA
-  const [apiDATA, setApiDATA] = useState([]);
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.apiReducer.data);
+
+  //API DATA
 
   useEffect(() => {
-    dispatch(fetchData());
+    dispatch(fetchTodoData());
   }, [dispatch]);
 
   useEffect(() => {
@@ -68,15 +65,14 @@ function Todolist() {
     <div className={`${contextTheme.theme} Todolist `} ref={scrollRef}>
       <h1>Todos</h1>
       <Todoform ref={dataRef} />
-      {data &&
-        data.map((todo) => (
-          <Todo
-            todoList={todoList}
-            task={todo}
-            key={todo.id}
-            selectTodo={selectTodo}
-          />
-        ))}
+      {displayedTODO.map((todo) => (
+        <Todo
+          todoList={todoList}
+          task={todo}
+          key={todo.id}
+          selectTodo={selectTodo}
+        />
+      ))}
       <Footer />
     </div>
   );

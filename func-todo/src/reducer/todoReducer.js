@@ -1,7 +1,5 @@
 import { FILTER } from "./filterReducer";
-import { useEffect } from "react";
-import { getData } from "../API/todoData.js";
-import { postData } from "../API/todoData.js";
+import { getData } from "../API/todoData";
 export const type = {
   ADD_TODO: "ADD_TODO",
   DELETE_TODO: "DELETE_TODO",
@@ -19,6 +17,7 @@ const todoReducer = (state = initialState, action) => {
     case type.ADD_TODO:
       const addList = [...state.list];
       addList.push(action.payload);
+      getData();
       return {
         ...state,
         list: addList,

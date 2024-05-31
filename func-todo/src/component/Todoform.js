@@ -8,7 +8,7 @@ import React, {
 import { v4 as uuidv4 } from "uuid";
 import { addTodo } from "../action/addTodoAction";
 import { useDispatch } from "react-redux";
-import { getData } from "../API/todoData.js";
+import { postData } from "../API/todoData.js";
 
 const Todoform = forwardRef(({ ...props }, ref) => {
   const [value, setValue] = useState("");
@@ -34,6 +34,7 @@ const Todoform = forwardRef(({ ...props }, ref) => {
     if (value.trim()) {
       addNewTodo(value);
     }
+    postData({ task: value });
   };
 
   useImperativeHandle(ref, () => ({
