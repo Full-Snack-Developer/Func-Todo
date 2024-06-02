@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from "uuid";
 import { addTodo } from "../action/addTodoAction";
 import { useDispatch } from "react-redux";
 import { postData } from "../API/todoData.js";
+import { editTodo } from "../action/editTodoAction.js";
+import { editData } from "../API/todoData.js";
 
 const Todoform = forwardRef(({ ...props }, ref) => {
   const [value, setValue] = useState("");
@@ -16,25 +18,34 @@ const Todoform = forwardRef(({ ...props }, ref) => {
   const dispatch = useDispatch();
   const [id, setId] = useState(null);
 
-  const addNewTodo = (task) => {
-    const newTODO = {
-      id: uuidv4(),
-      task: task,
-      status: false,
-      eidt: false,
-    };
-
-    const actionAddTODO = addTodo(newTODO);
-    dispatch(actionAddTODO);
-    setValue("");
-  };
+  useEffect(() => {
+    if (id !== null) {
+      const selectedTodo = props.todoList?.find((todo) => todo.id === id);
+      if (selectedTodo) {
+        setValue(selectedTodo.task);
+      }
+    }
+  }, [id, props.todoList]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (value.trim()) {
-      addNewTodo(value);
+      if (id !== null) {
+        const updatedTodo = { id, task: value, status: false, edit: false };
+        const actionUpdateTodo = editTodo(updatedTodo);
+        dispatch(actionUpdateTodo);
+        editData(id, value);
+      } else {
+        const newTodo = {
+          task: value,
+        };
+        const actionAddTodo = addTodo(newTodo);
+        dispatch(actionAddTodo);
+        postData({ task: value });
+      }
+
+      setValue("");
     }
-    postData({ task: value });
   };
 
   useImperativeHandle(ref, () => ({

@@ -12,4 +12,8 @@ const deleteData = (id) => {
   return instance.delete(`/listTodo/${id}`);
 };
 
-export { getData, postData, deleteData };
+const editData = (id, data) => {
+  return instance.put(`/listTodo/${id}`, data);
+};
+
+export { getData, postData, deleteData, editData };

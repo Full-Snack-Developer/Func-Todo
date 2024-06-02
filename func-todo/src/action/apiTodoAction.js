@@ -15,8 +15,8 @@ export const fetchTodoDataFailure = (error) => ({
   payload: error,
 });
 
-export const fetchTodoData = () => {
-  return getData()
+export const fetchTodoData = async () => {
+  return await getData()
     .then((response) => {
       return {
         type: apiType.FETCH_TODO_DATA_SUCCESS,

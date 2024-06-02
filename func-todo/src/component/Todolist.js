@@ -13,16 +13,18 @@ function Todolist() {
   const contextTheme = useContext(themeContext);
   const scrollRef = useRef(null);
   const dataRef = useRef(null);
-  const todoList = useSelector((state) => state.todoReducer.list);
+  const todoList = useSelector((state) => state.apiReducer.list);
+  // const todoList = useSelector((state) => state.todoReducer.list);
   const currentFilter = useSelector((state) => state.filterReducer.filter);
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
   const dispatch = useDispatch();
 
   //API DATA
-
   useEffect(() => {
-    dispatch(fetchTodoData());
+    fetchTodoData().then((response) => {
+      dispatch(response);
+    });
   }, [dispatch]);
 
   useEffect(() => {
@@ -57,8 +59,12 @@ function Todolist() {
   const displayedTODO = filteredTODO.slice(0, page * itemsPerPage);
 
   const selectTodo = (id) => {
-    // dataRef.current.selectTodo(id);
-    console.log(id);
+    const selectedTodo = todoList.find((todo) => todo.id === id);
+    if (selectedTodo) {
+      if (dataRef.current) {
+        dataRef.current.updateValue(selectedTodo.id, selectedTodo.task);
+      }
+    }
   };
 
   return (

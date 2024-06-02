@@ -1,5 +1,5 @@
 import { FILTER } from "./filterReducer";
-import { getData } from "../API/todoData";
+
 export const type = {
   ADD_TODO: "ADD_TODO",
   DELETE_TODO: "DELETE_TODO",
@@ -17,7 +17,6 @@ const todoReducer = (state = initialState, action) => {
     case type.ADD_TODO:
       const addList = [...state.list];
       addList.push(action.payload);
-      getData();
       return {
         ...state,
         list: addList,
