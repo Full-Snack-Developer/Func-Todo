@@ -15,38 +15,31 @@ export const initialState = {
 const todoReducer = (state = initialState, action) => {
   switch (action.type) {
     case type.ADD_TODO:
-      const addList = [...state.list];
-      addList.push(action.payload);
       return {
         ...state,
-        list: addList,
+        list: [...state.list, action.payload],
       };
 
     case type.DELETE_TODO:
-      const deleteList = state.list.filter(
-        (todo) => todo.id !== action.payload
-      );
       return {
         ...state,
-        list: deleteList,
+        list: state.list.filter((todo) => todo.id !== action.payload),
       };
 
     case type.STATUS_TODO:
-      const statusList = state.list.map((todo) =>
-        todo.id === action.payload ? { ...todo, status: !todo.status } : todo
-      );
       return {
         ...state,
-        list: statusList,
+        list: state.list.map((todo) =>
+          todo.id === action.payload ? { ...todo, status: !todo.status } : todo
+        ),
       };
 
     case type.EDIT_TODO:
-      const editList = state.list.map((todo) =>
-        todo.id === action.payload.id ? action.payload : todo
-      );
       return {
         ...state,
-        list: editList,
+        list: state.list.map((todo) =>
+          todo.id === action.payload.id ? action.payload : todo
+        ),
       };
 
     default:

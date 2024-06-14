@@ -43,8 +43,8 @@ const Todoform = forwardRef(({ ...props }, ref) => {
         dispatch(actionAddTodo);
         postData({ task: value });
       }
-
       setValue("");
+      setId(null);
     }
   };
 
