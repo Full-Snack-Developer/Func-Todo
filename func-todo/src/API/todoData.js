@@ -16,4 +16,8 @@ const editData = (id, data) => {
   return instance.put(`/listTodo/${id}`, data);
 };
 
-export { getData, postData, deleteData, editData };
+const editStatus = (id, data) => {
+  return instance.put(`/listTodo/${id}`, data);
+};
+
+export { getData, postData, deleteData, editData, editStatus };

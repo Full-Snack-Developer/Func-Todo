@@ -3,11 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { deleteTodo } from "../action/deleteTodoAction";
 import { statusTodo } from "../action/statusTodoAction";
-import { useDispatch } from "react-redux";
-import { deleteData } from "../API/todoData.js";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteData, editStatus } from "../API/todoData.js";
 
 export default function Todo({ task, selectTodo }) {
   const dispatch = useDispatch();
+  const todoList = useSelector((state) => state.todoReducer.list);
 
   const deleteNewTodo = (id) => {
     dispatch(deleteTodo(id));
@@ -15,7 +16,11 @@ export default function Todo({ task, selectTodo }) {
   };
 
   const toggleComplete = (id) => {
+    const statusID = todoList.find((todo) => todo.id === id);
+    const updatedStatus = {...statusID, status : !statusID.status}
     dispatch(statusTodo(id));
+    debugger
+    editStatus(id, updatedStatus)
     console.log(id);
   };
 

@@ -13,13 +13,13 @@ function Todolist() {
   const contextTheme = useContext(themeContext);
   const scrollRef = useRef(null);
   const dataRef = useRef(null);
-  const todoList = useSelector((state) => state.apiReducer.list);
-  // const todoList = useSelector((state) => state.todoReducer.list);
+  // const todoList = useSelector((state) => state.apiReducer.list);
+  const todoList = useSelector((state) => state.todoReducer.list);
   const currentFilter = useSelector((state) => state.filterReducer.filter);
   const [page, setPage] = useState(1);
   const itemsPerPage = 5;
   const dispatch = useDispatch();
-
+  debugger
   //API DATA
   useEffect(() => {
     fetchTodoData().then((response) => {
@@ -49,10 +49,19 @@ function Todolist() {
     };
   }, []);
 
-  const filteredTODO = todoList.filter((todo) => {
-    if (currentFilter === FILTER.ALL) return true;
-    if (currentFilter === FILTER.DONE) return todo.status === true;
-    if (currentFilter === FILTER.DOING) return todo.status === false;
+  const filteredTODO = todoList.filter((todoList) => {
+    if (currentFilter === FILTER.ALL){
+      debugger
+      return true;
+    };
+    if (currentFilter === FILTER.DONE){
+      debugger
+      return todoList.status === true;
+    } 
+    if (currentFilter === FILTER.DOING){
+      debugger
+      return todoList.status === false;
+    }
     return true;
   });
 
