@@ -4,18 +4,17 @@ import React, {
   useRef,
   useEffect,
   useImperativeHandle,
-} from "react";
-import { v4 as uuidv4 } from "uuid";
-import { addTodo } from "../action/addTodoAction";
-import { useDispatch, useSelector } from "react-redux";
-import { postData } from "../API/todoData.js";
-import { editTodo } from "../action/editTodoAction.js";
-import { editData } from "../API/todoData.js";
-import { statusTodo } from "../action/statusTodoAction.js";
-
+} from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { addTodo } from '../action/addTodoAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { postData } from '../API/todoData.js';
+import { editTodo } from '../action/editTodoAction.js';
+import { editData } from '../API/todoData.js';
+import { statusTodo } from '../action/statusTodoAction.js';
 
 const Todoform = forwardRef(({ ...props }, ref) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const [id, setId] = useState(null);
@@ -24,7 +23,6 @@ const Todoform = forwardRef(({ ...props }, ref) => {
   useEffect(() => {
     if (id !== null) {
       const selectedTodo = props.todoList?.find((todo) => todo.id === id);
-      debugger
       if (selectedTodo) {
         setValue(selectedTodo.task);
       }
@@ -36,21 +34,19 @@ const Todoform = forwardRef(({ ...props }, ref) => {
     if (value.trim()) {
       if (id !== null) {
         const todoID = todoList.find((todo) => todo.id === id);
-        const updatedTodo = {...todoID,  task: value };
+        const updatedTodo = { ...todoID, task: value };
         const actionUpdateTodo = editTodo(updatedTodo);
         dispatch(actionUpdateTodo);
-        editData(id, updatedTodo);
       } else {
         const newTodo = {
           task: value,
           status: false,
-          id: todoList.length +1
+          id: todoList.length + 1,
         };
         const actionAddTodo = addTodo(newTodo);
         dispatch(actionAddTodo);
-        postData(newTodo);
       }
-      setValue("");
+      setValue('');
       setId(null);
     }
   };

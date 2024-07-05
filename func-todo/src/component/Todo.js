@@ -12,19 +12,16 @@ export default function Todo({ task, selectTodo }) {
 
   const deleteNewTodo = (id) => {
     dispatch(deleteTodo(id));
-    deleteData(id);
+    // deleteData(id);
   };
 
   const toggleComplete = (id) => {
     const statusID = todoList.find((todo) => todo.id === id);
     const updatedStatus = {...statusID, status : !statusID.status}
     dispatch(statusTodo(id));
-    debugger
-    editStatus(id, updatedStatus)
-    console.log(id);
+    // editStatus(id, updatedStatus)
   };
 
-  console.log(task.status);
   return (
     <div className="Todo">
       <p

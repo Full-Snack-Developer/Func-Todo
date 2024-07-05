@@ -1,5 +1,5 @@
-import { call, put, takeEvery } from "redux-saga/effects";
-import { getData, postData, deleteData, editData } from "../API/todoData";
+import { call, put, take, takeEvery } from "redux-saga/effects";
+import { getData, postData, deleteData, editData, editStatus } from "../API/todoData";
 import { apiType } from "../action/apiTodoAction";
 import { type } from "../reducer/todoReducer";
 
@@ -20,8 +20,7 @@ function* fetchTodos() {
 
 function* createTodo(action) {
   try {
-    const response = yield call(postData, action.payload);
-    yield put({ type: type.ADD_TODO, payload: response.data });
+    yield call(postData, action.payload)
   } catch (error) {
     yield put(console.log(error));
   }
@@ -29,8 +28,7 @@ function* createTodo(action) {
 
 function* removeTodo(action) {
   try {
-    yield call(deleteData, action.payload.id);
-    yield put({ type: type.DELETE_TODO, payload: action.payload.id });
+    yield call(deleteData, action.payload);
   } catch (error) {
     yield put(console.log(error));
   }
@@ -38,22 +36,34 @@ function* removeTodo(action) {
 
 function* updateTodo(action) {
   try {
-    const response = yield call(
+     yield call(
       editData,
       action.payload.id,
       action.payload.data
     );
-    yield put({ type: type.EDIT_TODO, payload: response.data });
   } catch (error) {
     yield put(console.log(error));
   }
 }
 
+function* editStatusS(action){
+  try{
+    yield call(
+      editStatus,
+      action.payload,
+    );
+  }catch(error) {
+    yield put(console.log(error));
+  }
+}
+
+
 function* rootSaga() {
-  yield takeEvery("FETCH_DATA_REQUEST", fetchTodos);
-  yield takeEvery("ADD_DATA_SUCCESS", createTodo);
-  yield takeEvery("DELETE_DATA_SUCCESS", removeTodo);
-  yield takeEvery("EDIT_DATA_SUCCESS", updateTodo);
+  yield takeEvery(apiType.FETCH_TODO_DATA, fetchTodos);
+  yield takeEvery(type.ADD_TODO, createTodo);
+  yield takeEvery(type.DELETE_TODO, removeTodo);
+  yield takeEvery(type.EDIT_TODO, updateTodo);
+  yield takeEvery(type.STATUS_TODO, editStatusS)
 }
 
 export default rootSaga;

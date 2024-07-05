@@ -1,16 +1,33 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { ThemeProvider } from "./context/themeProvider";
-import { Provider } from "react-redux";
-import store from "./store";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ThemeProvider } from './context/themeProvider';
+import { Provider } from 'react-redux';
+import store from './store';
+import AddPage from './route/AddPage';
+import ErrorPage from './route/ErrorPage';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [],
+  },
+
+  {
+    path: 'addpage',
+    element: <AddPage />,
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <ThemeProvider>
-      <App />
+      <RouterProvider router={router} />
     </ThemeProvider>
   </Provider>
 );
